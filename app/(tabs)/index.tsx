@@ -99,7 +99,7 @@ export default function Index() {
 
           {/* image */}
           <Image
-            source={require('@/assets/images/illustration_home.png')}
+            source={require('../../src/assets/images/illustration_home.png')}
             style={{
               width: 124,
               height: 124,
@@ -143,7 +143,7 @@ export default function Index() {
                   }}
                 >
                   <Image
-                    source={require('@/assets/images/announcement_img_1.png')}
+                    source={require('../../src/assets/images/announcement_img_1.png')}
                     style={{
                       width: '100%',
                       height: 75,
@@ -206,7 +206,7 @@ export default function Index() {
             Quiz yourself!
           </Text>
 
-          <View className="flex-row justify-between">
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             {/* sql basics */}
             <Link href="/(tabs)/quiz" asChild>
                 <Pressable
@@ -235,10 +235,9 @@ export default function Index() {
                     </Text>
 
                     <Image
-                      source={require('@/assets/images/star_icon.png')}
+                      source={require('../../src/assets/images/star_icon.png')}
                       className="right-0 bottom-0 absolute"
-                    >
-                    </Image>
+                    />
                   </LinearGradient>
                 </Pressable>
             </Link>
@@ -271,10 +270,9 @@ export default function Index() {
                     </Text>
 
                     <Image
-                      source={require('@/assets/images/trophy_icon.png')}
+                      source={require('../../src/assets/images/trophy_icon.png')}
                       className="right-0 bottom-0 absolute"
-                    >
-                    </Image>
+                    />
                   </LinearGradient>
               </Pressable>
             </Link>

@@ -3,7 +3,7 @@ import React from 'react';
 
 import { View, Text, Image } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { useColorScheme } from '../../src/hooks/use-color-scheme';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -36,8 +36,8 @@ export default function TabLayout() {
                 <Image
                   source={
                     focused  
-                      ? require('@/assets/images/home_icon_nav_foc.png')
-                      : require('@/assets/images/home_icon_nav.png')
+                      ? require('../../src/assets/images/home_icon_nav_foc.png')
+                      : require('../../src/assets/images/home_icon_nav.png')
                     }
                   style={{ 
                     width: 28, height: 28, resizeMode:'contain', 
@@ -65,8 +65,8 @@ export default function TabLayout() {
               <Image
                 source={
                   focused  
-                    ? require('@/assets/images/lectures_icon_nav_foc.png')
-                    : require('@/assets/images/lectures_icon_nav.png')
+                    ? require('../../src/assets/images/lectures_icon_nav_foc.png')
+                    : require('../../src/assets/images/lectures_icon_nav.png')
                   }
                 style={{
                   width: 28, height: 28, resizeMode:'contain', 
@@ -90,45 +90,45 @@ export default function TabLayout() {
         options={{
           title: 'Quiz',
           tabBarIcon: ({ focused }) => (
-            <View className='items-center justify-center' style={{top:-20}}>
-              <View style={{ 
-                  shadowColor: '#000', shadowOffset: { width: 0, height: -1 }, shadowOpacity: 0.3, shadowRadius: 4, 
-                  elevation: 5 
+            <View style={{ alignItems: 'center', justifyContent: 'center', top: -20 }}>
+              <View style={{
+                  shadowColor: '#000', shadowOffset: { width: 0, height: -1 }, shadowOpacity: 0.3, shadowRadius: 4,
+                  elevation: 5
                 }}>
                 <LinearGradient
-                  colors={['#652EC7', '#DF3983', '#FFD300']} 
+                  colors={['#652EC7', '#DF3983', '#FFD300']}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 1 }}
                   style={{
                     width: 56,
                     height: 56,
-                    borderRadius: 16,  
-                    transform: [{ rotate: '45deg'}], 
+                    borderRadius: 16,
+                    transform: [{ rotate: '45deg'}],
                     alignItems: 'center',
                     justifyContent: 'center',
                   }}
                 >
-                </LinearGradient>  
+                </LinearGradient>
               </View>
 
-              <View className="absolute" style={{ top: 6, alignItems: 'center', justifyContent: 'center' }}>
+              <View style={{ position: 'absolute', top: 6, alignItems: 'center', justifyContent: 'center' }}>
                 <Image
-                  source={require('@/assets/images/quiz_icon_nav.png')}
+                    source={require('../../src/assets/images/quiz_icon_nav.png')}
                   style={{
-                    width: 28, height: 28, resizeMode:'contain', 
+                    width: 28, height: 28, resizeMode:'contain',
                   }}
                 />
-                <Text
-                  style={{ marginTop: 28 }}
-                  className={`text-[12px] ${
-                    focused 
-                      ? 'text-primary-pink font-semibold'  
-                      : 'text-primary-gray font-medium'        
-                  }`}
-                >
-                  Quiz
-                </Text>
               </View>
+              <Text
+                style={{
+                  marginTop: 12,
+                  fontSize: 12,
+                  color: focused ? '#C03694' : '#757575',
+                  fontWeight: focused ? '600' : '500',
+                }}
+              >
+                Quiz
+              </Text>
             </View>
           ),
         }}
@@ -142,8 +142,8 @@ export default function TabLayout() {
               <Image
                 source={
                   focused  
-                    ? require('@/assets/images/bulletin_icon_nav_foc.png')
-                    : require('@/assets/images/bulletin_icon_nav.png')
+                      ? require('../../src/assets/images/bulletin_icon_nav_foc.png')
+                      : require('../../src/assets/images/bulletin_icon_nav.png')
                   }
                 style={{
                   width: 28, height: 28, resizeMode:'contain', 
@@ -171,8 +171,8 @@ export default function TabLayout() {
               <Image
                 source={
                   focused  
-                    ? require('@/assets/images/more_icon_nav_foc.png')
-                    : require('@/assets/images/more_icon_nav.png')
+                      ? require('../../src/assets/images/more_icon_nav_foc.png')
+                      : require('../../src/assets/images/more_icon_nav.png')
                   }
                 style={{
                   width: 28, height: 28, resizeMode:'contain', 
