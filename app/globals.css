@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base{
+    :root {
+    /* light mode */
+    --background: 255 250 253;
+    --text-black: 30 30 30;
+    --text-white: 255 255 255;
+
+    /* styling */
+    --primary-pink: 192 54 148;
+    --primary-dark-blue: 33 36 61;
+    --primary-gray: 117 117 117;
+
+    /* gradient */
+    --grad-purple: 101 46 199;
+    --grad-pink: 223 57 131;
+    --grad-yellow: 255 211 0;
+
+    /* gradient purple */
+    --grad-purple-med: 101 46 199;
+    --grad-purple-light: 153 113 225;
+    }
+
+    .dark {
+    --background: 13 15 26;
+    --text-black: 235 235 240;
+    --text-white: 255 255 255;
+
+    /* Styling */
+    --primary-pink: 245 90 190;
+    --primary-dark-blue: 164 174 214;
+    --primary-gray: 117 117 117;
+
+    /* Gradient */
+    --grad-purple: 138 90 226;
+    --grad-pink: 236 85 160;
+    --grad-yellow: 255 220 50;
+
+    /* Gradient Purple */
+    --grad-purple-med: 138 90 226;
+    --grad-purple-light: 180 150 240;
+    }
+}
