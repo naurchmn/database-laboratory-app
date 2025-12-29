@@ -1,6 +1,7 @@
 import { Pressable, Text, View, Image, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Link } from 'expo-router';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const announcements = [
   {
@@ -49,7 +50,10 @@ export default function Index() {
       </View>
 
       {/* isi konten */}
-      <View className="flex-1 bg-background px-6 py-6">
+      <ScrollView 
+        className="flex-1 bg-background px-6 py-6"
+        showsVerticalScrollIndicator={false}
+      >
 
         {/* what would you like to learn today */}
         <View className= "box-content w-full h-[120px] bg-white rounded-2xl"
@@ -127,11 +131,11 @@ export default function Index() {
                   style={{
                     height: 184,
                     width: 310,
-                    shadowColor: '#000',
                     shadowOffset: { width: 0, height: 2 },
                     shadowOpacity: 0.1,
                     shadowRadius: 4,
-                    elevation: 3,
+                    elevation: 13.1,
+                    boxShadow: "0px 1px 0px rgba(0, 0, 0, 0.12)",
                   }}
                 >
                   <Image
@@ -198,16 +202,75 @@ export default function Index() {
             Quiz yourself!
           </Text>
 
-          <Link href="/(tabs)/quiz" asChild>
-            <Pressable
-              className="bg-white rounded-2xl flex-row items-center px-4"
-              style={{}}
-            >
-            </Pressable>
-          </Link>
+          <View className="flex-row justify-between">
+            {/* sql basics */}
+            <Link href="/(tabs)/quiz" asChild>
+                <Pressable
+                  className="flex-1 mr-2 rounded-2xl overflow-hidden"
+                  style={{
+                    width: 164,
+                    height: 124,
+                  }}
+                >
+                  <LinearGradient
+                    colors={['#FFA0CA', '#EB68A3']}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 1 }}
+                    style={{ flex: 1, borderRadius: 16}}
+                  >
+                    <Text className="text-white font-bold text-left"
+                      style={{
+                        fontSize: 20,
+                        width: 90,
+                        letterSpacing: -0.2,
+                        marginTop: 16,
+                        marginLeft: 16,
+                      }}
+                    >
+                      SQL Basics
+                    </Text>
 
+                    <Image
+                      source={require('@/assets/images/star_icon.png')}
+                      className="right-0 bottom-0 absolute"
+                    >
+                    </Image>
+                  </LinearGradient>
+                </Pressable>
+            </Link>
+
+            {/* advanced sql */}
+            <Link href="/(tabs)/quiz" asChild>
+              <Pressable
+                className="flex-1 ml-2 bg-purple-300 rounded-2xl"
+                style={{
+                  width: 164,
+                  height: 124,
+                }}
+              >
+                <LinearGradient
+                    colors={['#C03694', '#F07FCC']}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 1 }}
+                    style={{ flex: 1, borderRadius: 16}}
+                  >
+                    <Text className="text-white font-bold text-left"
+                      style={{
+                        fontSize: 20,
+                        width: 93,
+                        letterSpacing: -0.2,
+                        marginTop: 16,
+                        marginLeft: 16,
+                      }}
+                    >
+                      SQL Advanced
+                    </Text>
+                  </LinearGradient>
+              </Pressable>
+            </Link>
+          </View>
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
