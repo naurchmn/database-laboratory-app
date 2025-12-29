@@ -1,7 +1,7 @@
-import { Pressable, Text, View, Image, ScrollView } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Link } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
+import { Link } from 'expo-router';
+import { Image, Pressable, ScrollView, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const announcements = [
   {
@@ -26,7 +26,9 @@ const announcements = [
 
 export default function Index() {
   return (
-    <SafeAreaView className="flex-1 bg-white" edges={['top']}>
+    <SafeAreaView className="flex-1 bg-white" 
+      edges={['top']}
+    >
       <View 
         className="flex-row justify-between items-center px-6 py-6 bg-white"
         style={{
@@ -46,13 +48,16 @@ export default function Index() {
               </Text>
           </View>
 
-          <View className="w-14 h-14 bg-gray-300 rounded-full shadow-sm" />
+          <Link href ="/(tabs)/more" asChild>
+            <View className="w-14 h-14 bg-gray-300 rounded-full shadow-sm" />
+          </Link>
       </View>
 
       {/* isi konten */}
       <ScrollView 
         className="flex-1 bg-background px-6 py-6"
         showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 50 }}
       >
 
         {/* what would you like to learn today */}
@@ -123,10 +128,9 @@ export default function Index() {
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={{ paddingBottom: 10 }}
           >
-            {announcements.map((announcements, index) => (
-              <Link href="/(tabs)/bulletin" asChild>
+            {announcements.map((items, index) => (
+              <Link key={items.id || index} href="/(tabs)/bulletin" asChild>
                 <Pressable
-                  key={announcements.id}
                   className="mr-4 bg-white rounded-xl overflow-hidden"
                   style={{
                     height: 184,
@@ -159,7 +163,7 @@ export default function Index() {
                           fontSize: 14,
                         }}
                       >
-                        {announcements.title}
+                        {items.title}
                       </Text>
 
                       <View
@@ -171,7 +175,7 @@ export default function Index() {
                             fontSize: 14,
                             letterSpacing: -0.2,
                           }}>
-                          {announcements.course}
+                          {items.course}
                         </Text>
                       </View>
 
@@ -181,7 +185,7 @@ export default function Index() {
                           fontSize: 14,
                           letterSpacing: -0.2,
                         }}>
-                        {announcements.description}
+                        {items.description}
                       </Text>
                     </View>
                   </View>
@@ -242,7 +246,7 @@ export default function Index() {
             {/* advanced sql */}
             <Link href="/(tabs)/quiz" asChild>
               <Pressable
-                className="flex-1 ml-2 bg-purple-300 rounded-2xl"
+                className="flex-1 ml-2 rounded-2xl overflow-hidden"
                 style={{
                   width: 164,
                   height: 124,
@@ -265,7 +269,85 @@ export default function Index() {
                     >
                       SQL Advanced
                     </Text>
+
+                    <Image
+                      source={require('@/assets/images/trophy_icon.png')}
+                      className="right-0 bottom-0 absolute"
+                    >
+                    </Image>
                   </LinearGradient>
+              </Pressable>
+            </Link>
+          </View>
+        </View>
+
+        {/* about us */}
+        <View className="mt-6">
+          <Text className="text-lg font-semibold text-text-black mb-4"
+            style={{
+              fontSize: 16,
+              letterSpacing: -0.2,
+            }}
+          >
+            Get to know us better!
+          </Text>
+
+          <View className="flex-column justify-between">
+            <Link href="/(tabs)/more" asChild>
+              <Pressable
+                className="flex-1 w-full mb-2 rounded-xl overflow-hidden"
+                style={{
+                  shadowColor: '#000',
+                  elevation: 13.1,
+                  boxShadow: "0px 0px 13.1px rgba(0, 0, 0, 0.12)",
+                  width: '100%',
+                  height: 48,
+                }}          
+                >
+                <LinearGradient
+                  colors={['#9971E1', '#662ec7a3']}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  style={{ flex: 1, borderRadius: 16, justifyContent: 'center', alignItems: 'center' }}
+                >
+                  <Text className="text-white font-bold text-center"
+                    style={{
+                      fontSize: 18,
+                      letterSpacing: -0.2,
+                    }}
+                  >
+                    What is database laboratory?
+                  </Text>
+                </LinearGradient>  
+              </Pressable>
+            </Link>
+
+            <Link href="/(tabs)/more" asChild>
+              <Pressable
+                className="flex-1 w-full rounded-xl overflow-hidden"
+                style={{
+                  shadowColor: '#000',
+                  elevation: 13.1,
+                  boxShadow: "0px 0px 13.1px rgba(0, 0, 0, 0.12)",
+                  width: '100%',
+                  height: 48,
+                }}          
+                >
+                <LinearGradient
+                  colors={['#9971E1', '#662ec7a3']}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  style={{ flex: 1, borderRadius: 16, justifyContent: 'center', alignItems: 'center' }}
+                >
+                  <Text className="text-white font-bold text-center"
+                    style={{
+                      fontSize: 18,
+                      letterSpacing: -0.2,
+                    }}
+                  >
+                    See our assistants and lecturers!
+                  </Text>
+                </LinearGradient>  
               </Pressable>
             </Link>
           </View>
