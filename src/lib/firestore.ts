@@ -1,5 +1,6 @@
 import { collection, getDocs, query, orderBy, limit, where } from "firebase/firestore";
-import { db } from "./firebase";
+import { ref, getDownloadURL } from "firebase/storage";
+import { db, storage } from "./firebase";
 
 // Types
 export interface Announcement {
@@ -12,11 +13,19 @@ export interface Announcement {
   slug: string;
 }
 
+export interface Material {
+  title: string;
+  filePath: string;
+  fileUrl?: string;
+}
+
 export interface Lecture {
   id: string;
+  slug: string;
+  code: string;
   title: string;
-  description?: string;
-  [key: string]: unknown;
+  image: string;
+  materials?: Material[];
 }
 
 export interface Quiz {
@@ -78,11 +87,58 @@ export async function getLectures(): Promise<Lecture[]> {
 
     return snapshot.docs.map((doc) => ({
       id: doc.id,
+      slug: doc.id, // Use document ID as slug
       ...doc.data(),
     })) as Lecture[];
   } catch (error) {
     console.error("Error fetching lectures:", error);
     return [];
+  }
+}
+
+// Get lecture by slug (document ID) with materials and resolved file URLs
+export async function getLectureBySlug(slug: string): Promise<Lecture | null> {
+  try {
+    const { doc: getDoc, getDoc: getDocSnapshot } = await import("firebase/firestore");
+    const docRef = getDoc(db, "lectures", slug);
+    const docSnap = await getDocSnapshot(docRef);
+
+    if (!docSnap.exists()) {
+      return null;
+    }
+
+    const data = docSnap.data() as Omit<Lecture, 'id' | 'slug'>;
+
+    // Resolve file URLs for materials
+    const materialsWithUrls: Material[] = [];
+    if (data.materials && Array.isArray(data.materials)) {
+      for (const material of data.materials) {
+        try {
+          const fileRef = ref(storage, material.filePath);
+          const fileUrl = await getDownloadURL(fileRef);
+          materialsWithUrls.push({
+            ...material,
+            fileUrl,
+          });
+        } catch (err) {
+          console.error(`Error getting URL for ${material.filePath}:`, err);
+          materialsWithUrls.push({
+            ...material,
+            fileUrl: undefined,
+          });
+        }
+      }
+    }
+
+    return {
+      id: docSnap.id,
+      slug: docSnap.id, // Use document ID as slug
+      ...data,
+      materials: materialsWithUrls,
+    };
+  } catch (error) {
+    console.error("Error fetching lecture by slug:", error);
+    return null;
   }
 }
 
