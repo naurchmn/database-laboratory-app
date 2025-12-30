@@ -1,10 +1,23 @@
 import GradientText from '@/components/Global/GradientText';
-import { Link } from 'expo-router';
+import { Link, router } from 'expo-router';
+import { useEffect } from 'react';
 import { Image, Pressable, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { auth } from '../../src/lib/firebase';
 
 
 export default function Lectures() {
+  useEffect(() => {
+    if (!auth.currentUser) {
+      router.replace('/(auth)/login');
+    }
+  }, []);
+
+  // Don't render if not authenticated
+  if (!auth.currentUser) {
+    return null;
+  }
+
   return (
     <SafeAreaView className="flex-1 bg-background" 
       edges={['top']}

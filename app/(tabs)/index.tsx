@@ -1,38 +1,50 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { Link } from 'expo-router';
-import { Image, Pressable, ScrollView, Text, View } from 'react-native';
+import { useEffect, useState } from 'react';
+import { ActivityIndicator, Image, Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
-const announcements = [
-  {
-    id: '1',
-    title: 'Materi Ujian Tengah Semester 2025/2026',
-    course: 'PBD[IF2040]',
-    description: 'Halo semua, berikut adalah materi yang akan diujikan pada UTS semester ini',
-  },
-  {
-    id: '2',
-    title: 'Materi Ujian Akhir Semester 2025/2026',
-    course: 'BD[IF2240]',
-    description: 'Halo semua, berikut adalah materi yang akan diujikan pada UAS semester ini',
-  },
-  {
-    id: '3',
-    title: 'Praktikum 3',
-    course: 'MBD[II2250]',
-    description: 'Praktikum 3 akan dilaksanakan pada minggu depan, jangan lupa untuk mempersiapkan diri ya!',
-  },
-]
+import { auth } from '../../src/lib/firebase';
+import { getLatestAnnouncements, Announcement } from '../../src/lib/firestore';
 
 export default function Index() {
+  const [userName, setUserName] = useState<string | null>(null);
+  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Get current user name
+    const user = auth.currentUser;
+    if (user?.displayName) {
+      setUserName(user.displayName.split(' ')[0]); // First name only
+    } else if (user?.email) {
+      setUserName(user.email.split('@')[0]); // Use email username as fallback
+    } else {
+      setUserName(null); // Guest user
+    }
+
+    // Fetch announcements from Firestore
+    const fetchAnnouncements = async () => {
+      try {
+        const data = await getLatestAnnouncements(3);
+        setAnnouncements(data);
+      } catch (error) {
+        console.error('Error fetching announcements:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAnnouncements();
+  }, []);
+
   return (
-    <SafeAreaView className="flex-1 bg-white" 
+    <SafeAreaView className="flex-1 bg-white"
       edges={['top']}
     >
-      <View 
+      <View
         className="flex-row justify-between items-center px-6 py-6 bg-white"
         style={{
-          shadowColor: '#000', 
+          shadowColor: '#000',
           shadowOpacity: 0.05,
           shadowRadius: 3,
           shadowOffset: { width: 0, height: 4 },
@@ -41,10 +53,10 @@ export default function Index() {
       >
           <View>
               <Text className="text-3xl font-bold text-primary-pink">
-                  Hey User!
+                  {userName ? `Hey ${userName}!` : 'Welcome!'}
               </Text>
               <Text className="text-gray-700 text-base font-medium mt-2">
-                  Welcome back
+                  {userName ? 'Welcome back' : 'Sign in to get started'}
               </Text>
           </View>
 
@@ -54,7 +66,7 @@ export default function Index() {
       </View>
 
       {/* isi konten */}
-      <ScrollView 
+      <ScrollView
         className="flex-1 bg-background px-6 py-6"
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 50 }}
@@ -69,7 +81,7 @@ export default function Index() {
           }}>
 
           <Text className="text-left align-top pt-3 pl-4 font-bold text-grad-purple"
-            style={{ 
+            style={{
               height: 70,
               width: 200,
               fontSize: 20,
@@ -122,77 +134,90 @@ export default function Index() {
           >
             Recent announcements
           </Text>
-          
-          <ScrollView
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{ paddingBottom: 10 }}
-          >
-            {announcements.map((items, index) => (
-              <Link key={items.id || index} href="/(tabs)/bulletin" asChild>
-                <Pressable
-                  className="mr-4 bg-white rounded-xl overflow-hidden"
-                  style={{
-                    height: 184,
-                    width: 310,
-                    shadowOffset: { width: 0, height: 2 },
-                    shadowOpacity: 0.1,
-                    shadowRadius: 4,
-                    elevation: 13.1,
-                    boxShadow: "0px 1px 0px rgba(0, 0, 0, 0.12)",
-                  }}
-                >
-                  <Image
-                    source={require('../../src/assets/images/announcement_img_1.png')}
+
+          {loading ? (
+            <View style={{ height: 184, justifyContent: 'center', alignItems: 'center' }}>
+              <ActivityIndicator size="large" color="#C03694" />
+            </View>
+          ) : announcements.length === 0 ? (
+            <View style={{ height: 184, justifyContent: 'center', alignItems: 'center' }}>
+              <Text style={{ color: '#757575' }}>No announcements yet</Text>
+            </View>
+          ) : (
+            <ScrollView
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{ paddingBottom: 10 }}
+            >
+              {announcements.map((item, index) => (
+                <Link key={item.id || index} href="/(tabs)/bulletin" asChild>
+                  <Pressable
+                    className="mr-4 bg-white rounded-xl overflow-hidden"
                     style={{
-                      width: '100%',
-                      height: 75,
-                      resizeMode: 'cover',
+                      height: 184,
+                      width: 310,
+                      shadowOffset: { width: 0, height: 2 },
+                      shadowOpacity: 0.1,
+                      shadowRadius: 4,
+                      elevation: 13.1,
+                      boxShadow: "0px 1px 0px rgba(0, 0, 0, 0.12)",
                     }}
-                  />
+                  >
+                    <Image
+                      source={require('../../src/assets/images/announcement_img_1.png')}
+                      style={{
+                        width: '100%',
+                        height: 75,
+                        resizeMode: 'cover',
+                      }}
+                    />
 
-                  <View className="flex-1 px-3 py-3">
-                    <View className="flex-1 gap-y-2">
-                      <Text 
-                        adjustsFontSizeToFit={true}
-                        numberOfLines={1}
-                        minimumFontScale={0.5}
-                        className="text-left font-small text-text-black"
-                        style={{
-                          letterSpacing: -0.2,
-                          fontSize: 14,
-                        }}
-                      >
-                        {items.title}
-                      </Text>
-
-                      <View
-                        className="self-start bg-pink-300 rounded-full px-3 h-5 justify-center"
-                      >
-                        <Text className="text-white font-medium"
-                          numberOfLines={1}
+                    <View className="flex-1 px-3 py-2">
+                      <View className="flex-1 gap-y-1">
+                        <Text
+                          adjustsFontSizeToFit={true}
+                          numberOfLines={2}
+                          minimumFontScale={0.7}
+                          className="text-left font-semibold text-text-black"
                           style={{
-                            fontSize: 14,
                             letterSpacing: -0.2,
+                            fontSize: 16,
+                            lineHeight: 20,
+                          }}
+                        >
+                          {item.title}
+                        </Text>
+
+                        <View
+                          className="self-start bg-pink-300 rounded-full px-2 h-4 justify-center"
+                        >
+                          <Text className="text-white font-medium"
+                            numberOfLines={1}
+                            style={{
+                              fontSize: 11,
+                              letterSpacing: -0.2,
+                            }}>
+                            {item.category}
+                          </Text>
+                        </View>
+
+                        <Text className="text-text-black font-light"
+                          numberOfLines={2}
+                          style={{
+                            fontSize: 12,
+                            letterSpacing: -0.2,
+                            lineHeight: 15,
+                            marginTop: 2,
                           }}>
-                          {items.course}
+                          {item.content}
                         </Text>
                       </View>
-
-                      <Text className="text-text-black font-light"
-                        numberOfLines={3}
-                        style={{
-                          fontSize: 14,
-                          letterSpacing: -0.2,
-                        }}>
-                        {items.description}
-                      </Text>
                     </View>
-                  </View>
-                </Pressable>
-              </Link>
-            ))}
-          </ScrollView>
+                  </Pressable>
+                </Link>
+              ))}
+            </ScrollView>
+          )}
         </View>
 
         {/* quiz */}
@@ -300,7 +325,7 @@ export default function Index() {
                   boxShadow: "0px 0px 13.1px rgba(0, 0, 0, 0.12)",
                   width: '100%',
                   height: 48,
-                }}          
+                }}
                 >
                 <LinearGradient
                   colors={['#9971E1', '#662ec7a3']}
@@ -316,7 +341,7 @@ export default function Index() {
                   >
                     What is database laboratory?
                   </Text>
-                </LinearGradient>  
+                </LinearGradient>
               </Pressable>
             </Link>
 
@@ -329,7 +354,7 @@ export default function Index() {
                   boxShadow: "0px 0px 13.1px rgba(0, 0, 0, 0.12)",
                   width: '100%',
                   height: 48,
-                }}          
+                }}
                 >
                 <LinearGradient
                   colors={['#9971E1', '#662ec7a3']}
@@ -345,7 +370,7 @@ export default function Index() {
                   >
                     See our assistants and lecturers!
                   </Text>
-                </LinearGradient>  
+                </LinearGradient>
               </Pressable>
             </Link>
           </View>
