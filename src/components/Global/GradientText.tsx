@@ -3,7 +3,7 @@ import { LinearGradient, type LinearGradientProps } from 'expo-linear-gradient';
 import React from 'react';
 import { Text, TextProps, TextStyle } from 'react-native';
 
-const DEFAULT_COLORS = ['#652EC7', '#DF3983', '#FFD300'] as const;
+const DEFAULT_COLORS = ['#652EC7', '#DF3983', '#F59E0B'] as const;
 
 type GradientTextProps = {
   children: React.ReactNode;
