@@ -6,6 +6,8 @@ import { db, storage } from "./firebase";
 export interface Announcement {
   id: string;
   title: string;
+  alt?: string;
+  Matkul?: string;
   date: string;
   category: string;
   content: string;
@@ -43,6 +45,28 @@ export interface Member {
   img?: string;
   imageUrl?: string;
   [key: string]: unknown;
+}
+
+// Get announcement by slug
+export async function getAnnouncementBySlug(slug: string): Promise<Announcement | null> {
+  try {
+    const announcementsRef = collection(db, "announcements");
+    const q = query(announcementsRef, where("slug", "==", slug));
+    const snapshot = await getDocs(q);
+
+    if (snapshot.empty) {
+      return null;
+    }
+
+    const doc = snapshot.docs[0];
+    return {
+      id: doc.id,
+      ...doc.data(),
+    } as Announcement;
+  } catch (error) {
+    console.error("Error fetching announcement by slug:", error);
+    return null;
+  }
 }
 
 // Get all announcements ordered by date (descending)

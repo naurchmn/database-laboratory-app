@@ -150,7 +150,7 @@ export default function Index() {
               contentContainerStyle={{ paddingBottom: 10 }}
             >
               {announcements.map((item, index) => (
-                <Link key={item.id || index} href="/(tabs)/bulletin" asChild>
+                <Link key={item.id || index} href={`/bulletin/${item.slug}` as any} asChild>
                   <Pressable
                     className="mr-4 bg-white rounded-xl overflow-hidden"
                     style={{
@@ -189,7 +189,8 @@ export default function Index() {
                         </Text>
 
                         <View
-                          className="self-start bg-pink-300 rounded-full px-2 h-4 justify-center"
+                          className="self-start rounded-full px-2 h-4 justify-center"
+                          style={{ backgroundColor: '#6D28D9' }}
                         >
                           <Text className="text-white font-medium"
                             numberOfLines={1}
@@ -197,7 +198,7 @@ export default function Index() {
                               fontSize: 11,
                               letterSpacing: -0.2,
                             }}>
-                            {item.category}
+                            {item.Matkul || item.category}
                           </Text>
                         </View>
 
