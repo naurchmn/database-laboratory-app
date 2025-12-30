@@ -1,6 +1,7 @@
+import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Link } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { Link, useFocusEffect } from 'expo-router';
+import { useCallback, useState } from 'react';
 import { ActivityIndicator, Image, Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { auth } from '../../src/lib/firebase';
@@ -8,34 +9,45 @@ import { getLatestAnnouncements, Announcement } from '../../src/lib/firestore';
 
 export default function Index() {
   const [userName, setUserName] = useState<string | null>(null);
+  const [userInitial, setUserInitial] = useState<string>('');
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    // Get current user name
-    const user = auth.currentUser;
-    if (user?.displayName) {
-      setUserName(user.displayName.split(' ')[0]); // First name only
-    } else if (user?.email) {
-      setUserName(user.email.split('@')[0]); // Use email username as fallback
-    } else {
-      setUserName(null); // Guest user
-    }
-
-    // Fetch announcements from Firestore
-    const fetchAnnouncements = async () => {
-      try {
-        const data = await getLatestAnnouncements(3);
-        setAnnouncements(data);
-      } catch (error) {
-        console.error('Error fetching announcements:', error);
-      } finally {
-        setLoading(false);
+  // Refresh user data when screen is focused
+  useFocusEffect(
+    useCallback(() => {
+      const user = auth.currentUser;
+      if (user?.displayName) {
+        setUserName(user.displayName.split(' ')[0]); // First name only
+        setUserInitial(user.displayName.charAt(0).toUpperCase());
+      } else if (user?.email) {
+        const emailName = user.email.split('@')[0];
+        setUserName(emailName); // Use email username as fallback
+        setUserInitial(emailName.charAt(0).toUpperCase());
+      } else {
+        setUserName(null); // Guest user
+        setUserInitial('');
       }
-    };
+    }, [])
+  );
 
-    fetchAnnouncements();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      // Fetch announcements from Firestore
+      const fetchAnnouncements = async () => {
+        try {
+          const data = await getLatestAnnouncements(3);
+          setAnnouncements(data);
+        } catch (error) {
+          console.error('Error fetching announcements:', error);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchAnnouncements();
+    }, [])
+  );
 
   return (
     <SafeAreaView className="flex-1 bg-white"
@@ -60,8 +72,30 @@ export default function Index() {
               </Text>
           </View>
 
-          <Link href ="/(tabs)/more" asChild>
-            <View className="w-14 h-14 bg-gray-300 rounded-full shadow-sm" />
+          <Link href="/more/edit-profile" asChild>
+            <Pressable
+              style={{
+                width: 56,
+                height: 56,
+                borderRadius: 28,
+                backgroundColor: userInitial ? '#C03694' : '#D1D5DB',
+                justifyContent: 'center',
+                alignItems: 'center',
+                shadowColor: '#000',
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 0.1,
+                shadowRadius: 3,
+                elevation: 3,
+              }}
+            >
+              {userInitial ? (
+                <Text style={{ color: 'white', fontSize: 24, fontWeight: '700' }}>
+                  {userInitial}
+                </Text>
+              ) : (
+                <Ionicons name="person" size={28} color="#9CA3AF" />
+              )}
+            </Pressable>
           </Link>
       </View>
 
