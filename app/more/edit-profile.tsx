@@ -1,16 +1,20 @@
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, Alert, Pressable, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, Alert, Image, Pressable, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
-import { auth } from '../../src/lib/firebase';
+import * as ImagePicker from 'expo-image-picker';
+import { auth, storage } from '../../src/lib/firebase';
 import { updateProfile } from 'firebase/auth';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 export default function EditProfile() {
   const [displayName, setDisplayName] = useState('');
   const [userInitial, setUserInitial] = useState('');
+  const [photoURL, setPhotoURL] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [uploadingPhoto, setUploadingPhoto] = useState(false);
 
   useEffect(() => {
     if (!auth.currentUser) {
@@ -27,7 +31,60 @@ export default function EditProfile() {
       setDisplayName(emailName);
       setUserInitial(emailName.charAt(0).toUpperCase());
     }
+    if (user?.photoURL) {
+      setPhotoURL(user.photoURL);
+    }
   }, []);
+
+  const pickImage = async () => {
+    // Request permission
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert('Permission needed', 'Please grant permission to access your photos');
+      return;
+    }
+
+    // Launch image picker
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ['images'],
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 0.7,
+    });
+
+    if (!result.canceled && result.assets[0]) {
+      await uploadImage(result.assets[0].uri);
+    }
+  };
+
+  const uploadImage = async (uri: string) => {
+    if (!auth.currentUser) return;
+
+    setUploadingPhoto(true);
+    try {
+      // Convert URI to blob
+      const response = await fetch(uri);
+      const blob = await response.blob();
+
+      // Upload to Firebase Storage
+      const storageRef = ref(storage, `profile-photos/${auth.currentUser.uid}`);
+      await uploadBytes(storageRef, blob);
+
+      // Get download URL
+      const downloadURL = await getDownloadURL(storageRef);
+
+      // Update user profile
+      await updateProfile(auth.currentUser, { photoURL: downloadURL });
+      setPhotoURL(downloadURL);
+
+      Alert.alert('Success', 'Photo updated successfully');
+    } catch (error) {
+      console.error('Error uploading photo:', error);
+      Alert.alert('Error', 'Failed to upload photo');
+    } finally {
+      setUploadingPhoto(false);
+    }
+  };
 
   const handleSave = async () => {
     if (!auth.currentUser) return;
@@ -41,6 +98,7 @@ export default function EditProfile() {
     try {
       await updateProfile(auth.currentUser, {
         displayName: displayName.trim(),
+        photoURL: photoURL || undefined,
       });
       Alert.alert('Success', 'Profile updated successfully', [
         { text: 'OK', onPress: () => router.back() }
@@ -91,14 +149,23 @@ export default function EditProfile() {
         {/* Profile Avatar */}
         <View className="items-center mb-8">
           <View
-            className="rounded-full justify-center items-center mb-3"
+            className="rounded-full justify-center items-center"
             style={{
               width: 100,
               height: 100,
-              backgroundColor: userInitial ? '#C03694' : '#E5E7EB',
+              backgroundColor: photoURL ? 'transparent' : (userInitial ? '#C03694' : '#E5E7EB'),
+              overflow: 'hidden',
             }}
           >
-            {userInitial ? (
+            {uploadingPhoto ? (
+              <ActivityIndicator size="large" color="#C03694" />
+            ) : photoURL ? (
+              <Image
+                source={{ uri: photoURL }}
+                style={{ width: 100, height: 100 }}
+                resizeMode="cover"
+              />
+            ) : userInitial ? (
               <Text style={{ color: 'white', fontSize: 42, fontWeight: '700' }}>
                 {userInitial}
               </Text>
@@ -106,7 +173,12 @@ export default function EditProfile() {
               <Ionicons name="person" size={50} color="#9CA3AF" />
             )}
           </View>
-          <Text style={{ color: '#757575', fontSize: 14 }}>
+          <Pressable onPress={pickImage} disabled={uploadingPhoto}>
+            <Text style={{ color: '#C03694', fontSize: 14, fontWeight: '600', marginTop: 8 }}>
+              Edit Photo
+            </Text>
+          </Pressable>
+          <Text style={{ color: '#757575', fontSize: 14, marginTop: 4 }}>
             {auth.currentUser?.email}
           </Text>
         </View>
