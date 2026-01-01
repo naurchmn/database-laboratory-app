@@ -44,7 +44,8 @@ export interface Member {
   role?: string;
   img?: string;
   imageUrl?: string;
-  [key: string]: unknown;
+  email?: string;
+  info?: string;
 }
 
 // Get announcement by slug
@@ -185,16 +186,39 @@ export async function getQuizzes(category?: string): Promise<Quiz[]> {
   }
 }
 
-// Get all members
+// Get all members with resolved image URLs
 export async function getMembers(): Promise<Member[]> {
   try {
     const membersRef = collection(db, "members");
     const snapshot = await getDocs(membersRef);
 
-    return snapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    })) as Member[];
+    const members: Member[] = [];
+    for (const doc of snapshot.docs) {
+      const data = doc.data();
+      let imageUrl: string | undefined;
+
+      // Resolve image URL from Firebase Storage
+      if (data.img) {
+        try {
+          const imageRef = ref(storage, data.img);
+          imageUrl = await getDownloadURL(imageRef);
+        } catch (err) {
+          console.error(`Error getting image URL for ${data.img}:`, err);
+        }
+      }
+
+      members.push({
+        id: doc.id,
+        name: data.name,
+        role: data.role,
+        img: data.img,
+        imageUrl,
+        email: data.email,
+        info: data.info,
+      });
+    }
+
+    return members;
   } catch (error) {
     console.error("Error fetching members:", error);
     return [];

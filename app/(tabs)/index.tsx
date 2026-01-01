@@ -10,6 +10,7 @@ import { getLatestAnnouncements, Announcement } from '../../src/lib/firestore';
 export default function Index() {
   const [userName, setUserName] = useState<string | null>(null);
   const [userInitial, setUserInitial] = useState<string>('');
+  const [userPhotoURL, setUserPhotoURL] = useState<string | null>(null);
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -28,6 +29,7 @@ export default function Index() {
         setUserName(null); // Guest user
         setUserInitial('');
       }
+      setUserPhotoURL(user?.photoURL || null);
     }, [])
   );
 
@@ -78,7 +80,7 @@ export default function Index() {
                 width: 56,
                 height: 56,
                 borderRadius: 28,
-                backgroundColor: userInitial ? '#C03694' : '#D1D5DB',
+                backgroundColor: userPhotoURL ? 'transparent' : (userInitial ? '#C03694' : '#D1D5DB'),
                 justifyContent: 'center',
                 alignItems: 'center',
                 shadowColor: '#000',
@@ -86,9 +88,16 @@ export default function Index() {
                 shadowOpacity: 0.1,
                 shadowRadius: 3,
                 elevation: 3,
+                overflow: 'hidden',
               }}
             >
-              {userInitial ? (
+              {userPhotoURL ? (
+                <Image
+                  source={{ uri: userPhotoURL }}
+                  style={{ width: 56, height: 56 }}
+                  resizeMode="cover"
+                />
+              ) : userInitial ? (
                 <Text style={{ color: 'white', fontSize: 24, fontWeight: '700' }}>
                   {userInitial}
                 </Text>
@@ -351,7 +360,7 @@ export default function Index() {
           </Text>
 
           <View className="flex-column justify-between">
-            <Link href="/(tabs)/more" asChild>
+            <Link href="/more/purpose" asChild>
               <Pressable
                 className="flex-1 w-full mb-2 rounded-xl overflow-hidden"
                 style={{
@@ -380,7 +389,7 @@ export default function Index() {
               </Pressable>
             </Link>
 
-            <Link href="/(tabs)/more" asChild>
+            <Link href="/more/assistants" asChild>
               <Pressable
                 className="flex-1 w-full rounded-xl overflow-hidden"
                 style={{

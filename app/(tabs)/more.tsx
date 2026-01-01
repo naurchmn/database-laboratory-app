@@ -41,6 +41,7 @@ export default function More() {
   const [userEmail, setUserEmail] = useState<string>('');
   const [userPhone, setUserPhone] = useState<string>('');
   const [userInitial, setUserInitial] = useState<string>('');
+  const [userPhotoURL, setUserPhotoURL] = useState<string | null>(null);
 
   // Refresh user data when screen is focused
   useFocusEffect(
@@ -65,6 +66,7 @@ export default function More() {
       if (user?.phoneNumber) {
         setUserPhone(user.phoneNumber);
       }
+      setUserPhotoURL(user?.photoURL || null);
     }, [])
   );
 
@@ -127,7 +129,7 @@ export default function More() {
             style={{
               width: 60,
               height: 60,
-              backgroundColor: userInitial ? '#C03694' : '#E5E7EB',
+              backgroundColor: userPhotoURL ? 'transparent' : (userInitial ? '#C03694' : '#E5E7EB'),
               shadowColor: '#000',
               shadowOffset: { width: 0, height: 0 },
               shadowOpacity: 0.25,
@@ -135,7 +137,13 @@ export default function More() {
               elevation: 3,
             }}
           >
-            {userInitial ? (
+            {userPhotoURL ? (
+              <Image
+                source={{ uri: userPhotoURL }}
+                style={{ width: 60, height: 60 }}
+                resizeMode="cover"
+              />
+            ) : userInitial ? (
               <Text style={{ color: 'white', fontSize: 28, fontWeight: '700' }}>
                 {userInitial}
               </Text>
@@ -178,28 +186,24 @@ export default function More() {
         </Text>
 
         {/* Purpose of database laboratory */}
-        <Link href="/more/purpose" asChild>
-          <Pressable style={{ marginBottom: 12 }}>
-            <GradientBorderButton>
-              <Text style={{ color: '#C03694', fontSize: 16, fontWeight: '700', lineHeight: 22.4, flex: 1 }}>
-                Purpose of database laboratory
-              </Text>
-              <Ionicons name="chevron-forward" size={18} color="#FFD300" />
-            </GradientBorderButton>
-          </Pressable>
-        </Link>
+        <View style={{ marginBottom: 12 }}>
+          <GradientBorderButton onPress={() => router.push('/more/purpose')}>
+            <Text style={{ color: '#C03694', fontSize: 16, fontWeight: '700', lineHeight: 22.4, flex: 1 }}>
+              Purpose of database laboratory
+            </Text>
+            <Ionicons name="chevron-forward" size={18} color="#FFD300" />
+          </GradientBorderButton>
+        </View>
 
         {/* Assistants and lecturers */}
-        <Link href="/more/assistants" asChild>
-          <Pressable style={{ marginBottom: 24 }}>
-            <GradientBorderButton>
-              <Text style={{ color: '#C03694', fontSize: 16, fontWeight: '700', lineHeight: 22.4, flex: 1 }}>
-                Assistants and lecturers
-              </Text>
-              <Ionicons name="chevron-forward" size={18} color="#FFD300" />
-            </GradientBorderButton>
-          </Pressable>
-        </Link>
+        <View style={{ marginBottom: 24 }}>
+          <GradientBorderButton onPress={() => router.push('/more/assistants')}>
+            <Text style={{ color: '#C03694', fontSize: 16, fontWeight: '700', lineHeight: 22.4, flex: 1 }}>
+              Assistants and lecturers
+            </Text>
+            <Ionicons name="chevron-forward" size={18} color="#FFD300" />
+          </GradientBorderButton>
+        </View>
 
         {/* Connect with us Section */}
         <Text style={{ color: '#DF3983', fontSize: 16, fontWeight: '700', lineHeight: 22.4, marginBottom: 10 }}>
