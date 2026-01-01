@@ -277,7 +277,7 @@ export default function Index() {
 
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             {/* sql basics */}
-            <Link href="/(tabs)/quiz" asChild>
+            <Link href="/quiz/basic" asChild>
                 <Pressable
                   className="flex-1 mr-2 rounded-2xl overflow-hidden"
                   style={{
@@ -312,7 +312,7 @@ export default function Index() {
             </Link>
 
             {/* advanced sql */}
-            <Link href="/(tabs)/quiz" asChild>
+            <Link href="/quiz/advanced" asChild>
               <Pressable
                 className="flex-1 ml-2 rounded-2xl overflow-hidden"
                 style={{
