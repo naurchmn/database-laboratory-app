@@ -34,8 +34,12 @@ export interface Quiz {
   id: string;
   title: string;
   category: string;
+  order: number;
   schemaImage?: string;
-  [key: string]: unknown;
+  schemaImageUrl?: string;
+  schemaText?: string;
+  tokens: string[];
+  answer: string[];
 }
 
 export interface Member {
@@ -182,6 +186,48 @@ export async function getQuizzes(category?: string): Promise<Quiz[]> {
     })) as Quiz[];
   } catch (error) {
     console.error("Error fetching quizzes:", error);
+    return [];
+  }
+}
+
+// Get quizzes by category ordered by order field, with schema image URL resolved
+export async function getQuizzesByCategory(category: string): Promise<Quiz[]> {
+  try {
+    const quizzesRef = collection(db, "quizzes");
+    const q = query(quizzesRef, where("category", "==", category), orderBy("order", "asc"));
+    const snapshot = await getDocs(q);
+
+    const quizzes: Quiz[] = [];
+    for (const doc of snapshot.docs) {
+      const data = doc.data();
+      let schemaImageUrl: string | undefined;
+
+      // Resolve schema image URL from Firebase Storage
+      if (data.schemaImage) {
+        try {
+          const imageRef = ref(storage, data.schemaImage);
+          schemaImageUrl = await getDownloadURL(imageRef);
+        } catch (err) {
+          console.error(`Error getting schema image URL for ${data.schemaImage}:`, err);
+        }
+      }
+
+      quizzes.push({
+        id: doc.id,
+        title: data.title,
+        category: data.category,
+        order: data.order,
+        schemaImage: data.schemaImage,
+        schemaImageUrl,
+        schemaText: data.schemaText,
+        tokens: data.tokens || [],
+        answer: data.answer || [],
+      });
+    }
+
+    return quizzes;
+  } catch (error) {
+    console.error("Error fetching quizzes by category:", error);
     return [];
   }
 }
