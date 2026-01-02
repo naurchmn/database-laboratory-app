@@ -24,7 +24,7 @@ export function useGoogleLogin() {
   // Build redirect; on Expo Go force the Expo auth proxy URL
   const redirectUri = isExpoGo
     ? `https://auth.expo.dev/${EXPO_PROXY_PROJECT}`
-    : AuthSession.makeRedirectUri({ scheme: "databaselaboratory" });
+    : undefined; // Let Google provider choose native redirect for Android client
 
   // Use ONLY Web client in Expo Go; Android client for Dev Client/APK
   const googleConfig = isExpoGo
