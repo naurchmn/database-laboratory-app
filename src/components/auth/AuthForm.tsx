@@ -1,5 +1,12 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { View, Text, TextInput, Pressable, StyleSheet, ActivityIndicator } from "react-native";
+import React, { useMemo, useState } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  Pressable,
+  StyleSheet,
+  ActivityIndicator,
+} from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Link, router } from "expo-router";
 import { auth } from "../../lib/firebase";
@@ -20,22 +27,10 @@ export default function AuthForm({ mode }: { mode: Mode }) {
   const [password, setPassword] = useState("");
 
   const [busy, setBusy] = useState(false);
+  const [googleBusy, setGoogleBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const { promptAsync, response, maybeSignInWithGoogle } = useGoogleLogin();
-
-  useEffect(() => {
-    // ketika Google flow selesai -> login ke Firebase
-    (async () => {
-      try {
-        await maybeSignInWithGoogle();
-        // kalau sukses, pindah ke tabs
-        if (response?.type === "success") router.replace("/(tabs)");
-      } catch (e: any) {
-        if (response?.type === "success") setError(e?.message ?? "Google sign-in failed");
-      }
-    })();
-  }, [response]);
+  const { signInWithGoogle } = useGoogleLogin();
 
   const canSubmit = useMemo(() => {
     if (!email.trim() || !password) return false;
@@ -50,7 +45,11 @@ export default function AuthForm({ mode }: { mode: Mode }) {
 
     try {
       if (isRegister) {
-        const cred = await createUserWithEmailAndPassword(auth, email.trim(), password);
+        const cred = await createUserWithEmailAndPassword(
+          auth,
+          email.trim(),
+          password
+        );
         if (fullName.trim()) {
           await updateProfile(cred.user, { displayName: fullName.trim() });
         }
@@ -68,7 +67,16 @@ export default function AuthForm({ mode }: { mode: Mode }) {
 
   async function onGoogle() {
     setError(null);
-    await promptAsync(); // open browser
+    setGoogleBusy(true);
+    try {
+      const res = await signInWithGoogle();
+      if (res.ok) router.replace("/(tabs)");
+      else setError(res.error ?? "Google sign-in failed");
+    } catch (e: any) {
+      setError(e?.message ?? "Google sign-in failed");
+    } finally {
+      setGoogleBusy(false);
+    }
   }
 
   return (
@@ -105,14 +113,24 @@ export default function AuthForm({ mode }: { mode: Mode }) {
 
       {error ? <Text style={styles.error}>{error}</Text> : null}
 
-      <Pressable disabled={!canSubmit || busy} onPress={onSubmit} style={{ opacity: !canSubmit || busy ? 0.6 : 1 }}>
+      <Pressable
+        disabled={!canSubmit || busy}
+        onPress={onSubmit}
+        style={{ opacity: !canSubmit || busy ? 0.6 : 1 }}
+      >
         <LinearGradient
           colors={["#652EC7", "#DF3983", "#FFD300"]}
           start={{ x: 0, y: 0.5 }}
           end={{ x: 1, y: 0.5 }}
           style={styles.primaryBtn}
         >
-          {busy ? <ActivityIndicator /> : <Text style={styles.primaryText}>{isRegister ? "Sign Up" : "Login"}</Text>}
+          {busy ? (
+            <ActivityIndicator />
+          ) : (
+            <Text style={styles.primaryText}>
+              {isRegister ? "Sign Up" : "Login"}
+            </Text>
+          )}
         </LinearGradient>
       </Pressable>
 
@@ -122,13 +140,24 @@ export default function AuthForm({ mode }: { mode: Mode }) {
         <View style={styles.divider} />
       </View>
 
-      <Pressable onPress={onGoogle} style={styles.googleBtn}>
-        <Text style={styles.googleText}>G</Text>
+      <Pressable
+        onPress={onGoogle}
+        disabled={googleBusy}
+        style={[styles.googleBtn, { opacity: googleBusy ? 0.6 : 1 }]}
+      >
+        {googleBusy ? (
+          <ActivityIndicator />
+        ) : (
+          <Text style={styles.googleText}>G</Text>
+        )}
       </Pressable>
 
       <Text style={styles.bottomText}>
         {isRegister ? "Already have an account? " : "Don’t have an account? "}
-        <Link href={isRegister ? "/(auth)/login" : "/(auth)/register"} style={styles.link}>
+        <Link
+          href={isRegister ? "/(auth)/login" : "/(auth)/register"}
+          style={styles.link}
+        >
           {isRegister ? "Sign In" : "Sign Up"}
         </Link>
       </Text>
@@ -163,6 +192,7 @@ const styles = StyleSheet.create({
     color: "#111",
     backgroundColor: "#FFF",
   },
+  error: { color: "#D11", fontWeight: "600" },
   primaryBtn: {
     height: 48,
     borderRadius: 10,
@@ -170,7 +200,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   primaryText: { color: "white", fontWeight: "700", fontSize: 16 },
-  dividerRow: { flexDirection: "row", alignItems: "center", gap: 10, marginTop: 10 },
+  dividerRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+    marginTop: 10,
+  },
   divider: { flex: 1, height: 1, backgroundColor: "#D0D0D0" },
   dividerText: { color: "#757575", fontSize: 12, fontWeight: "600" },
   googleBtn: {
@@ -185,7 +220,6 @@ const styles = StyleSheet.create({
     borderColor: "#EAEAEA",
   },
   googleText: { fontSize: 18, fontWeight: "800" },
-  bottomText: { textAlign: "center", color: "#757575", marginTop: 6 },
-  link: { color: "#8A38F5", fontWeight: "700" },
-  error: { color: "#D10000", fontWeight: "600" },
+  bottomText: { textAlign: "center", color: "#666", marginTop: 4 },
+  link: { fontWeight: "800" },
 });
