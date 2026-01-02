@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "328211649729",
+    "firebase_url": "https://lab-basda-default-rtdb.firebaseio.com",
+    "project_id": "lab-basda",
+    "storage_bucket": "lab-basda.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:328211649729:android:6a58230bd3fc6c7f223040",
+        "android_client_info": {
+          "package_name": "com.basdat.databaselaboratory"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "328211649729-rpq58joquvkfligkaa9o4v5h62lps41q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.basdat.databaselaboratory",
+            "certificate_hash": "187b53d05fdf9bbea9f151291d56175e86d6fde7"
+          }
+        },
+        {
+          "client_id": "328211649729-labn29ppved0t2u95brg8rlbstnaj1mm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYUbwSkI2liIaqmummD_OHwqyK3hxsDO0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "328211649729-labn29ppved0t2u95brg8rlbstnaj1mm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
