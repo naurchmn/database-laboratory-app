@@ -10,42 +10,32 @@ WebBrowser.maybeCompleteAuthSession();
 const WEB_CLIENT_ID =
   "328211649729-labn29ppved0t2u95brg8rlbstnaj1mm.apps.googleusercontent.com";
 
-const ANDROID_CLIENT_ID =
-  "328211649729-rpq58joquvkfligkaa9o4v5h62lps41q.apps.googleusercontent.com";
-
 // harus sama persis dengan redirect di Google Console:
 // https://auth.expo.dev/@nona-project/DatabaseLaboratory
 const EXPO_PROXY_PROJECT = "@nona-project/DatabaseLaboratory";
 
 export function useGoogleLogin() {
-  const isExpoGo = Constants.appOwnership === "expo";
   console.log("App ownership:", Constants.appOwnership);
 
-  // Build redirect; on Expo Go force the Expo auth proxy URL
-  const redirectUri = isExpoGo
-    ? `https://auth.expo.dev/${EXPO_PROXY_PROJECT}`
-    : undefined; // Let Google provider choose native redirect for Android client
+  // Selalu gunakan Expo auth proxy untuk semua environment
+  // Ini yang sudah terdaftar di Google Console
+  const redirectUri = `https://auth.expo.dev/${EXPO_PROXY_PROJECT}`;
 
-  // Use ONLY Web client in Expo Go; Android client for Dev Client/APK
-  const googleConfig = isExpoGo
-    ? {
-        clientId: WEB_CLIENT_ID,
-        scopes: ["openid", "profile", "email"],
-        redirectUri,
-        responseType: AuthSession.ResponseType.IdToken,
-      }
-    : {
-        androidClientId: ANDROID_CLIENT_ID,
-        scopes: ["openid", "profile", "email"],
-        redirectUri,
-        responseType: AuthSession.ResponseType.IdToken,
-      };
+  console.log("Redirect URI:", redirectUri);
+
+  const googleConfig = {
+    clientId: WEB_CLIENT_ID,
+    scopes: ["openid", "profile", "email"],
+    redirectUri,
+    responseType: AuthSession.ResponseType.IdToken,
+  };
 
   const [request, response, promptAsync] = Google.useAuthRequest(googleConfig);
 
   async function signInWithGoogle() {
     console.log("AuthSession redirectUri variable:", redirectUri);
     console.log("AuthRequest redirectUri in request:", request?.redirectUri);
+
     const res = await promptAsync();
 
     if (res.type !== "success") {
