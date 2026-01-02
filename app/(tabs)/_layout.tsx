@@ -19,6 +19,7 @@ export default function TabLayout() {
             width: '100%',
             boxShadow: "0px -1px 6.8px rgba(0, 0, 0, 0.12)",
             elevation: 6.8,
+            overflow: 'visible',
         },
         tabBarItemStyle: {
           width: '100%',
@@ -32,7 +33,7 @@ export default function TabLayout() {
         options={{
           title: 'Home',
           tabBarIcon: ({ focused }) => (
-            <View style={{ alignItems: 'center', justifyContent: 'center', top: 10, gap: 4, width: 48}}>
+            <View style={{ alignItems: 'center', justifyContent: 'center', paddingTop: 25, gap: 4, width: 48}}>
                 <Image
                   source={
                     focused  
@@ -61,7 +62,7 @@ export default function TabLayout() {
         options={{
           title: 'Lectures',
           tabBarIcon: ({ focused }) => (
-            <View style={{ alignItems: 'center', justifyContent: 'center', top: 10, gap: 4, width: 48}}>
+            <View style={{ alignItems: 'center', justifyContent: 'center', paddingTop: 25, gap: 4, width: 50}}>
               <Image
                 source={
                   focused  
@@ -89,48 +90,66 @@ export default function TabLayout() {
         name="quiz"
         options={{
           title: 'Quiz',
-          tabBarIcon: ({ focused }) => (
-            <View style={{ alignItems: 'center', justifyContent: 'center', top: -20 }}>
-              <View style={{
-                  shadowColor: '#000', shadowOffset: { width: 0, height: -1 }, shadowOpacity: 0.3, shadowRadius: 4,
-                  elevation: 5
-                }}>
-                <LinearGradient
-                  colors={['#652EC7', '#DF3983', '#FFD300']}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 1, y: 1 }}
+          tabBarIcon: ({ focused }) => {
+            const diamond = 60;
+            const top_padding = 25;
+            const icon = 28;
+            const gap = 4;
+            const diamondOffsetY = +22;
+
+            return (
+              <View 
+                style={{ 
+                width: 48,
+                height: 84,
+                alignItems: 'center',
+                justifyContent: 'flex-start',
+                position: 'relative',
+              }}
+              >
+                <View style={{
+                    shadowColor: '#000', shadowOffset: { width: 0, height: -1 }, shadowOpacity: 0.3, shadowRadius: 4,
+                    elevation: 5,
+                    top: -diamond / 2 + diamondOffsetY,
+                  }}>
+                  <LinearGradient
+                    colors={['#652EC7', '#DF3983', '#FFD300']}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 1 }}
+                    style={{
+                      width: diamond,
+                      height: diamond,
+                      borderRadius: 16,
+                      transform: [{ rotate: '45deg'}],
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                      <View style={{ transform: [{ rotate: '-45deg'}], alignItems: 'center', justifyContent: 'center' }}>
+                          <Image
+                              source={require('../../src/assets/images/quiz_icon_nav.png')}
+                            style={{
+                              width: icon, height: icon, resizeMode:'contain',
+                            }}
+                          />
+                      </View>
+                  </LinearGradient>
+                </View>
+
+                <Text
                   style={{
-                    width: 56,
-                    height: 56,
-                    borderRadius: 16,
-                    transform: [{ rotate: '45deg'}],
-                    alignItems: 'center',
-                    justifyContent: 'center',
+                    position: 'absolute',
+                    top: 63,
+                    fontSize: 12,
+                    color: focused ? '#C03694' : '#757575',
+                    fontWeight: focused ? '600' : '500',
                   }}
                 >
-                </LinearGradient>
+                  Quiz
+                </Text>
               </View>
-
-              <View style={{ position: 'absolute', top: 6, alignItems: 'center', justifyContent: 'center' }}>
-                <Image
-                    source={require('../../src/assets/images/quiz_icon_nav.png')}
-                  style={{
-                    width: 28, height: 28, resizeMode:'contain',
-                  }}
-                />
-              </View>
-              <Text
-                style={{
-                  marginTop: 12,
-                  fontSize: 12,
-                  color: focused ? '#C03694' : '#757575',
-                  fontWeight: focused ? '600' : '500',
-                }}
-              >
-                Quiz
-              </Text>
-            </View>
-          ),
+            );
+          },
         }}
       />
       <Tabs.Screen
@@ -138,7 +157,7 @@ export default function TabLayout() {
         options={{
           title: 'Bulletin',
           tabBarIcon: ({ focused }) => (
-            <View style={{ alignItems: 'center', justifyContent: 'center', top: 10, gap: 4, width: 48}}>
+            <View style={{ alignItems: 'center', justifyContent: 'center', paddingTop: 25, gap: 4, width: 48}}>
               <Image
                 source={
                   focused  
@@ -167,7 +186,7 @@ export default function TabLayout() {
         options={{
           title: 'More',
           tabBarIcon: ({ focused }) => (
-            <View style={{ alignItems: 'center', justifyContent: 'center', top: 10, gap: 4, width: 48}}>
+            <View style={{ alignItems: 'center', justifyContent: 'center', paddingTop: 25, gap: 4, width: 48}}>
               <Image
                 source={
                   focused  
