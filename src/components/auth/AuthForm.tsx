@@ -15,7 +15,6 @@ import {
   signInWithEmailAndPassword,
   updateProfile,
 } from "firebase/auth";
-import { useGoogleLogin } from "../../lib/googleAuth";
 
 type Mode = "login" | "register";
 
@@ -27,10 +26,7 @@ export default function AuthForm({ mode }: { mode: Mode }) {
   const [password, setPassword] = useState("");
 
   const [busy, setBusy] = useState(false);
-  const [googleBusy, setGoogleBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  const { signInWithGoogle } = useGoogleLogin();
 
   const canSubmit = useMemo(() => {
     if (!email.trim() || !password) return false;
@@ -62,20 +58,6 @@ export default function AuthForm({ mode }: { mode: Mode }) {
       setError(mapFirebaseError(e?.code) ?? e?.message ?? "Auth failed");
     } finally {
       setBusy(false);
-    }
-  }
-
-  async function onGoogle() {
-    setError(null);
-    setGoogleBusy(true);
-    try {
-      const res = await signInWithGoogle();
-      if (res.ok) router.replace("/(tabs)");
-      else setError(res.error ?? "Google sign-in failed");
-    } catch (e: any) {
-      setError(e?.message ?? "Google sign-in failed");
-    } finally {
-      setGoogleBusy(false);
     }
   }
 
@@ -134,24 +116,6 @@ export default function AuthForm({ mode }: { mode: Mode }) {
         </LinearGradient>
       </Pressable>
 
-      <View style={styles.dividerRow}>
-        <View style={styles.divider} />
-        <Text style={styles.dividerText}>Sign in with</Text>
-        <View style={styles.divider} />
-      </View>
-
-      <Pressable
-        onPress={onGoogle}
-        disabled={googleBusy}
-        style={[styles.googleBtn, { opacity: googleBusy ? 0.6 : 1 }]}
-      >
-        {googleBusy ? (
-          <ActivityIndicator />
-        ) : (
-          <Text style={styles.googleText}>G</Text>
-        )}
-      </Pressable>
-
       <Text style={styles.bottomText}>
         {isRegister ? "Already have an account? " : "Don’t have an account? "}
         <Link
@@ -200,26 +164,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   primaryText: { color: "white", fontWeight: "700", fontSize: 16 },
-  dividerRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 10,
-    marginTop: 10,
-  },
-  divider: { flex: 1, height: 1, backgroundColor: "#D0D0D0" },
-  dividerText: { color: "#757575", fontSize: 12, fontWeight: "600" },
-  googleBtn: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    alignSelf: "center",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "white",
-    borderWidth: 1,
-    borderColor: "#EAEAEA",
-  },
-  googleText: { fontSize: 18, fontWeight: "800" },
   bottomText: { textAlign: "center", color: "#666", marginTop: 4 },
   link: { fontWeight: "800" },
 });

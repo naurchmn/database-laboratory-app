@@ -1,11 +1,11 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Link, router, useFocusEffect } from 'expo-router';
+import { LinearGradient } from 'expo-linear-gradient';
+import { router, useFocusEffect } from 'expo-router';
+import { signOut } from 'firebase/auth';
 import { useCallback, useState } from 'react';
 import { Image, Linking, Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { LinearGradient } from 'expo-linear-gradient';
 import { auth } from '../../src/lib/firebase';
-import { signOut } from 'firebase/auth';
 
 // Gradient border button component
 const GradientBorderButton = ({

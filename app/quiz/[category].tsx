@@ -1,25 +1,20 @@
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router, useLocalSearchParams } from 'expo-router';
-import { useEffect, useState, useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   ActivityIndicator,
+  Alert,
   Image,
   Pressable,
   ScrollView,
   Text,
   useWindowDimensions,
   View,
-  Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { auth } from '../../src/lib/firebase';
 import { getQuizzesByCategory, Quiz } from '../../src/lib/firestore';
-
-interface UserAnswer {
-  questionIndex: number;
-  selectedTokens: string[];
-}
 
 interface QuizResult {
   questionIndex: number;
@@ -231,33 +226,9 @@ export default function QuizDetail() {
     setUserAnswers(newAnswers);
   };
 
-  const resetQuestion = () => {
-    if (currentQuiz) {
-      setSelectedTokens([]);
-      setAvailableTokens(shuffleArray(currentQuiz.tokens));
-
-      // Clear saved answer
-      const newAnswers = new Map(userAnswers);
-      newAnswers.delete(currentIndex);
-      setUserAnswers(newAnswers);
-    }
-  };
-
   const goToQuestion = (index: number) => {
     if (!showResults) {
       setCurrentIndex(index);
-    }
-  };
-
-  const goToNextQuestion = () => {
-    if (currentIndex < quizzes.length - 1) {
-      setCurrentIndex(currentIndex + 1);
-    }
-  };
-
-  const goToPrevQuestion = () => {
-    if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1);
     }
   };
 
@@ -293,17 +264,6 @@ export default function QuizDetail() {
     setShowResults(true);
   };
 
-  const restartQuiz = () => {
-    setUserAnswers(new Map());
-    setResults([]);
-    setShowResults(false);
-    setCurrentIndex(0);
-    setExpandedCards(new Set());
-    if (quizzes.length > 0) {
-      setAvailableTokens(shuffleArray(quizzes[0].tokens));
-    }
-    setSelectedTokens([]);
-  };
 
   const toggleCardExpansion = (index: number) => {
     setExpandedCards(prev => {
@@ -329,8 +289,8 @@ export default function QuizDetail() {
 
   const selectedTokenItems = selectedTokens.map((token, index) => ({ token, index }));
   const selectedTokenRows = (() => {
-    const rows: Array<Array<{ token: string; index: number }>> = [];
-    let currentRow: Array<{ token: string; index: number }> = [];
+    const rows: { token: string; index: number }[][] = [];
+    let currentRow: { token: string; index: number }[] = [];
     let currentWidth = 0;
 
     const estimateChipWidth = (token: string) => {

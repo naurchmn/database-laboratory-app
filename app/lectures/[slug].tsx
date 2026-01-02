@@ -1,11 +1,11 @@
+import GradientText from '@/components/Global/GradientText';
+import { Ionicons } from '@expo/vector-icons';
+import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useEffect, useMemo, useState } from 'react';
 import { ActivityIndicator, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useLocalSearchParams, useRouter, Stack } from 'expo-router';
 import { WebView } from 'react-native-webview';
-import { Ionicons } from '@expo/vector-icons';
-import GradientText from '@/components/Global/GradientText';
-import { getLectureBySlug, Lecture, Material } from '../../src/lib/firestore';
+import { getLectureBySlug, Lecture } from '../../src/lib/firestore';
 
 function PdfPreview({ pdfUrl }: { pdfUrl: string }) {
   const viewerUrl = `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(pdfUrl)}`;
@@ -58,13 +58,12 @@ export default function LectureDetail() {
     fetchLecture();
   }, [slug]);
 
-  const materials = lecture?.materials || [];
-
   const filtered = useMemo(() => {
+    const materials = lecture?.materials ?? [];
     const q = query.trim().toLowerCase();
     if (!q) return materials;
     return materials.filter((m) => m.title.toLowerCase().includes(q));
-  }, [query, materials]);
+  }, [query, lecture?.materials]);
 
   if (loading) {
     return (

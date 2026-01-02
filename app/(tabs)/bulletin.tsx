@@ -1,11 +1,11 @@
+import GradientText from '@/components/Global/GradientText';
+import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 import { Link } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
 import { ActivityIndicator, Image, Modal, Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
-import GradientText from '@/components/Global/GradientText';
-import { getAnnouncements, Announcement } from '../../src/lib/firestore';
+import { Announcement, getAnnouncements } from '../../src/lib/firestore';
 
 type FilterType = 'Jadwal' | 'Materi';
 type SortType = 'newest' | 'oldest';
@@ -102,7 +102,7 @@ export default function Bulletin() {
         }}
       >
         <Text className="text-white text-3xl font-bold">
-          Lab's bulletin
+          Lab{"'"}s bulletin
         </Text>
 
         <View
@@ -344,7 +344,7 @@ export default function Bulletin() {
 
             {/* Title */}
             <Text className="font-bold text-xl mb-4" style={{ color: '#C03694' }}>
-              Bulletin's filter
+              Bulletin{"'"}s filter
             </Text>
 
             {/* Sort by section */}

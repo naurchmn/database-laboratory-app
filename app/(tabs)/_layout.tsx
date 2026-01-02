@@ -1,8 +1,8 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
 
-import { View, Text, Image } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { Image, Text, View } from 'react-native';
 import { useColorScheme } from '../../src/hooks/use-color-scheme';
 
 export default function TabLayout() {
@@ -92,9 +92,7 @@ export default function TabLayout() {
           title: 'Quiz',
           tabBarIcon: ({ focused }) => {
             const diamond = 60;
-            const top_padding = 25;
             const icon = 28;
-            const gap = 4;
             const diamondOffsetY = +22;
 
             return (
