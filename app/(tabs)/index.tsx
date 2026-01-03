@@ -5,7 +5,7 @@ import { useCallback, useState } from 'react';
 import { ActivityIndicator, Image, Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { auth } from '../../src/lib/firebase';
-import { getLatestAnnouncements, Announcement } from '../../src/lib/firestore';
+import { Announcement, getLatestAnnouncements } from '../../src/lib/firestore';
 
 export default function Index() {
   const [userName, setUserName] = useState<string | null>(null);
@@ -52,8 +52,10 @@ export default function Index() {
   );
 
   return (
-    <SafeAreaView className="flex-1 bg-white"
+    <SafeAreaView
+      className="flex-1 bg-white"
       edges={['top']}
+      testID="home-screen"
     >
       <View
         className="flex-row justify-between items-center px-6 py-6 bg-white"

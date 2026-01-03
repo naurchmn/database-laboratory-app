@@ -49,9 +49,10 @@ export default function Lectures() {
     for (let i = 0; i < lectures.length; i += 2) {
       rows.push(
         <View key={i} className="flex-row justify-between" style={{ marginBottom: 24 }}>
-          {lectures.slice(i, i + 2).map((lecture) => (
+          {lectures.slice(i, i + 2).map((lecture, idx) => (
             <Link key={lecture.id} href={`/lectures/${lecture.slug}` as any} asChild>
               <Pressable
+                testID={`lecture-item-${i + idx}`}
                 className="bg-white rounded-2xl border-2 border-primary-pink overflow-hidden"
                 style={{
                   width: 170,
@@ -101,6 +102,7 @@ export default function Lectures() {
   return (
     <SafeAreaView className="flex-1 bg-background"
       edges={['top']}
+      testID="lectures-screen"
     >
       {/* header */}
       <View

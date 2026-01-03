@@ -1,13 +1,13 @@
 import { Ionicons } from '@expo/vector-icons';
+import * as ImagePicker from 'expo-image-picker';
+import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
+import { updateProfile } from 'firebase/auth';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, Image, Pressable, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { LinearGradient } from 'expo-linear-gradient';
-import * as ImagePicker from 'expo-image-picker';
 import { auth, storage } from '../../src/lib/firebase';
-import { updateProfile } from 'firebase/auth';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 export default function EditProfile() {
   const [displayName, setDisplayName] = useState('');
@@ -123,12 +123,13 @@ export default function EditProfile() {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-background" edges={['top']}>
+    <SafeAreaView className="flex-1 bg-background" edges={['top']} testID="edit-profile-screen">
       {/* Header */}
       <View className="px-5 py-4 flex-row items-center">
         <Pressable
           onPress={() => router.back()}
           style={{ paddingVertical: 6, paddingRight: 12 }}
+          testID="edit-profile-back"
         >
           <Ionicons name="chevron-back" size={22} color="#6D28D9" />
         </Pressable>
@@ -193,6 +194,7 @@ export default function EditProfile() {
             onChangeText={setDisplayName}
             placeholder="Enter your name"
             placeholderTextColor="#9CA3AF"
+            testID="edit-profile-name"
             style={{
               backgroundColor: 'white',
               borderWidth: 1,

@@ -1,20 +1,20 @@
-import React, { useMemo, useState } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  Pressable,
-  StyleSheet,
-  ActivityIndicator,
-} from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { Link, router } from "expo-router";
-import { auth } from "../../lib/firebase";
+import { router } from "expo-router";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   updateProfile,
 } from "firebase/auth";
+import React, { useMemo, useState } from "react";
+import {
+  ActivityIndicator,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
+import { auth } from "../../lib/firebase";
 
 type Mode = "login" | "register";
 
@@ -65,6 +65,7 @@ export default function AuthForm({ mode }: { mode: Mode }) {
     <View style={{ gap: 14 }}>
       {isRegister && (
         <TextInput
+          testID="auth-full-name"
           placeholder="Full name"
           placeholderTextColor="#9A9A9A"
           value={fullName}
@@ -75,6 +76,7 @@ export default function AuthForm({ mode }: { mode: Mode }) {
       )}
 
       <TextInput
+        testID="auth-email"
         placeholder="Email"
         placeholderTextColor="#9A9A9A"
         value={email}
@@ -85,6 +87,7 @@ export default function AuthForm({ mode }: { mode: Mode }) {
       />
 
       <TextInput
+        testID="auth-password"
         placeholder="Password"
         placeholderTextColor="#9A9A9A"
         value={password}
@@ -93,9 +96,14 @@ export default function AuthForm({ mode }: { mode: Mode }) {
         secureTextEntry
       />
 
-      {error ? <Text style={styles.error}>{error}</Text> : null}
+      {error ? (
+        <Text testID="auth-error" style={styles.error}>
+          {error}
+        </Text>
+      ) : null}
 
       <Pressable
+        testID="auth-submit"
         disabled={!canSubmit || busy}
         onPress={onSubmit}
         style={{ opacity: !canSubmit || busy ? 0.6 : 1 }}
@@ -107,7 +115,7 @@ export default function AuthForm({ mode }: { mode: Mode }) {
           style={styles.primaryBtn}
         >
           {busy ? (
-            <ActivityIndicator />
+            <ActivityIndicator testID="auth-busy" />
           ) : (
             <Text style={styles.primaryText}>
               {isRegister ? "Sign Up" : "Login"}
@@ -116,15 +124,23 @@ export default function AuthForm({ mode }: { mode: Mode }) {
         </LinearGradient>
       </Pressable>
 
-      <Text style={styles.bottomText}>
-        {isRegister ? "Already have an account? " : "Don’t have an account? "}
-        <Link
-          href={isRegister ? "/(auth)/login" : "/(auth)/register"}
-          style={styles.link}
+      <View style={styles.bottomRow}>
+        <Text style={styles.bottomText}>
+          {isRegister
+            ? "Already have an account? "
+            : "Don’t have an account? "}
+        </Text>
+        <Pressable
+          testID={isRegister ? "auth-switch-to-login" : "auth-switch-to-register"}
+          onPress={() =>
+            router.push(isRegister ? "/(auth)/login" : "/(auth)/register")
+          }
         >
-          {isRegister ? "Sign In" : "Sign Up"}
-        </Link>
-      </Text>
+          <Text style={[styles.bottomText, styles.link]}>
+            {isRegister ? "Sign In" : "Sign Up"}
+          </Text>
+        </Pressable>
+      </View>
     </View>
   );
 }
@@ -164,6 +180,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   primaryText: { color: "white", fontWeight: "700", fontSize: 16 },
-  bottomText: { textAlign: "center", color: "#666", marginTop: 4 },
+  bottomRow: {
+    flexDirection: "row",
+    justifyContent: "center",
+    flexWrap: "wrap",
+    marginTop: 4,
+  },
+  bottomText: { textAlign: "center", color: "#666" },
   link: { fontWeight: "800" },
 });

@@ -32,6 +32,8 @@ export default function TabLayout() {
         name="index"
         options={{
           title: 'Home',
+          tabBarButtonTestID: 'tab-home',
+          tabBarAccessibilityLabel: 'tab-home',
           tabBarIcon: ({ focused }) => (
             <View style={{ alignItems: 'center', justifyContent: 'center', paddingTop: 25, gap: 4, width: 48}}>
                 <Image
@@ -61,6 +63,8 @@ export default function TabLayout() {
         name="lectures"
         options={{
           title: 'Lectures',
+          tabBarButtonTestID: 'tab-lectures',
+          tabBarAccessibilityLabel: 'tab-lectures',
           tabBarIcon: ({ focused }) => (
             <View style={{ alignItems: 'center', justifyContent: 'center', paddingTop: 25, gap: 4, width: 50}}>
               <Image
@@ -90,6 +94,8 @@ export default function TabLayout() {
         name="quiz"
         options={{
           title: 'Quiz',
+          tabBarButtonTestID: 'tab-quiz',
+          tabBarAccessibilityLabel: 'tab-quiz',
           tabBarIcon: ({ focused }) => {
             const diamond = 60;
             const icon = 28;
@@ -154,6 +160,8 @@ export default function TabLayout() {
         name="bulletin"
         options={{
           title: 'Bulletin',
+          tabBarButtonTestID: 'tab-bulletin',
+          tabBarAccessibilityLabel: 'tab-bulletin',
           tabBarIcon: ({ focused }) => (
             <View style={{ alignItems: 'center', justifyContent: 'center', paddingTop: 25, gap: 4, width: 48}}>
               <Image
@@ -183,6 +191,8 @@ export default function TabLayout() {
         name="more"
         options={{
           title: 'More',
+          tabBarButtonTestID: 'tab-more',
+          tabBarAccessibilityLabel: 'tab-more',
           tabBarIcon: ({ focused }) => (
             <View style={{ alignItems: 'center', justifyContent: 'center', paddingTop: 25, gap: 4, width: 48}}>
               <Image

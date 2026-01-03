@@ -90,7 +90,7 @@ export default function Bulletin() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-background" edges={['top']}>
+    <SafeAreaView className="flex-1 bg-background" edges={['top']} testID="bulletin-screen">
       {/* header */}
       <View
         className="w-full bg-[#C03694] p-4 justify-center items-center"
@@ -222,9 +222,10 @@ export default function Bulletin() {
             </View>
           ) : (
             <View className="flex-col gap-y-3 w-full">
-              {filteredAnnouncements.map((item) => (
+              {filteredAnnouncements.map((item, index) => (
                 <Link key={item.id} href={`/bulletin/${item.slug}` as any} asChild>
                   <Pressable
+                    testID={`bulletin-item-${index}`}
                     className="bg-white rounded-xl overflow-hidden flex-row self-center"
                     style={{
                       width: '100%',

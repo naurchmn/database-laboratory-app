@@ -1,14 +1,25 @@
-import React from "react";
-import { View, Text, StyleSheet, Image, Pressable } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
+import React from "react";
+import {
+    Image,
+    KeyboardAvoidingView,
+    Platform,
+    Pressable,
+    ScrollView,
+    StyleSheet,
+    Text,
+    View,
+} from "react-native";
 
 export default function AuthLayout({
   title,
   children,
+  testID,
 }: {
   title: string;
   children: React.ReactNode;
+  testID?: string;
 }) {
   return (
     <LinearGradient
@@ -16,6 +27,7 @@ export default function AuthLayout({
       start={{ x: 0, y: 0.1 }}
       end={{ x: 1, y: 0.1 }}
       style={styles.root}
+      testID={testID}
     >
       <View style={styles.header}>
         {/* ✅ BACK BUTTON (BISA DIPENCET) */}
@@ -33,15 +45,25 @@ export default function AuthLayout({
       </View>
 
       {/* Card */}
-      <View style={styles.card}>
-        <Image
-          source={require("../../assets/images/LogoBasdatShort.png")}
-          style={styles.logo}
-          resizeMode="contain"
-        />
+      <KeyboardAvoidingView
+        style={styles.card}
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+      >
+        <ScrollView
+          testID="auth-scroll"
+          contentContainerStyle={styles.cardScroll}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
+          <Image
+            source={require("../../assets/images/LogoBasdatShort.png")}
+            style={styles.logo}
+            resizeMode="contain"
+          />
 
-        <View style={styles.formWrap}>{children}</View>
-      </View>
+          <View style={styles.formWrap}>{children}</View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </LinearGradient>
   );
 }
@@ -104,7 +126,11 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 50,
     paddingHorizontal: 22,
     paddingTop: 22,
+  },
+
+  cardScroll: {
     alignItems: "center",
+    paddingBottom: 24,
   },
 
   logo: {

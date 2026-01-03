@@ -1,0 +1,9 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "types": ["jest", "detox"]
+  },
+  "include": ["**/*.ts", "**/*.tsx"],
+  "exclude": ["../node_modules/**", "../ios/**", "../android/**"]
+}

@@ -33,12 +33,47 @@ yarn-error.*
 # local env files
 .env*.local
 
+# (Recommended) ignore all env files; keep an example file if you have one.
+.env
+.env.*
+!.env.example
+
 # typescript
 *.tsbuildinfo
 
 app-example
 
-# generated native folders
-/ios
-/android
+# Detox / test artifacts
+artifacts/
+
+# Coverage
 coverage
+
+# Native build outputs (safe to ignore even if you commit ios/android)
+android/.gradle/
+android/**/build/
+android/local.properties
+android/**/captures/
+android/**/.cxx/
+android/**/.externalNativeBuild/
+android/**/*.apk
+android/**/*.aab
+android/**/*.hprof
+
+ios/Pods/
+ios/build/
+ios/DerivedData/
+ios/.xcode.env.local
+ios/.xcode.env.*.local
+ios/**/*.xcuserstate
+ios/**/xcuserdata/
+
+# IDE
+.vscode/
+.idea/
+*.iml
+
+# Optional: if you use Expo managed workflow and never commit native projects,
+# uncomment the following two lines.
+# /ios
+# /android
