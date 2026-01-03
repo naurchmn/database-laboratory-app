@@ -137,6 +137,45 @@ Jalankan 1 suite saja:
 npx detox test -c ios.sim.debug e2e/smoke.e2e.ts
 ```
 
+### Non-functional tests (iOS)
+
+Non-functional E2E tests ada di folder `e2e/nonfunctional/`:
+- `accessibility.e2e.ts`
+- `performance.e2e.ts`
+- `reliability.e2e.ts`
+
+Jalankan ketiganya sekaligus (iOS saja):
+
+```bash
+npx detox test -c ios.sim.debug e2e/nonfunctional
+```
+
+Atau jalankan satu per satu:
+
+```bash
+npx detox test -c ios.sim.debug e2e/nonfunctional/accessibility.e2e.ts
+npx detox test -c ios.sim.debug e2e/nonfunctional/performance.e2e.ts
+npx detox test -c ios.sim.debug e2e/nonfunctional/reliability.e2e.ts
+```
+
+### Non-functional tests (Android)
+
+Non-functional E2E tests ada di folder `e2e/nonfunctional/` (sama seperti iOS).
+
+Jalankan ketiganya sekaligus (Android saja):
+
+```bash
+npx detox test -c android.emu.release e2e/nonfunctional
+```
+
+Atau jalankan satu per satu:
+
+```bash
+npx detox test -c android.emu.release e2e/nonfunctional/accessibility.e2e.ts
+npx detox test -c android.emu.release e2e/nonfunctional/performance.e2e.ts
+npx detox test -c android.emu.release e2e/nonfunctional/reliability.e2e.ts
+```
+
 ### Android E2E (Emulator)
 
 Pastikan env SDK sudah benar (default macOS):
