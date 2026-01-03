@@ -11,11 +11,13 @@ import { auth } from '../../src/lib/firebase';
 const GradientBorderButton = ({
   children,
   onPress,
-  style
+  style,
+  testID,
 }: {
   children: React.ReactNode;
   onPress?: () => void;
   style?: object;
+  testID?: string;
 }) => (
   <LinearGradient
     colors={['#F97316', '#EC4899', '#8B5CF6']}
@@ -27,6 +29,7 @@ const GradientBorderButton = ({
     }, style]}
   >
     <Pressable
+      testID={testID}
       className="bg-white rounded-xl flex-row items-center justify-between px-3"
       style={{ height: 45 }}
       onPress={onPress}
@@ -96,7 +99,7 @@ export default function More() {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-background" edges={['top']}>
+    <SafeAreaView className="flex-1 bg-background" edges={['top']} testID="more-screen">
       {/* Pink Header */}
       <View
         className="w-full bg-[#C03694] justify-end items-center"
@@ -168,7 +171,7 @@ export default function More() {
           </View>
 
           {/* Edit Icon */}
-          <Pressable onPress={() => router.push('/more/edit-profile')}>
+          <Pressable onPress={() => router.push('/more/edit-profile')} testID="more-edit-profile">
             <Ionicons name="create-outline" size={18} color="#444444" />
           </Pressable>
         </View>
@@ -187,7 +190,10 @@ export default function More() {
 
         {/* Purpose of database laboratory */}
         <View style={{ marginBottom: 12 }}>
-          <GradientBorderButton onPress={() => router.push('/more/purpose')}>
+          <GradientBorderButton
+            onPress={() => router.push('/more/purpose')}
+            testID="more-purpose"
+          >
             <Text style={{ color: '#C03694', fontSize: 16, fontWeight: '700', lineHeight: 22.4, flex: 1 }}>
               Purpose of database laboratory
             </Text>
@@ -197,7 +203,10 @@ export default function More() {
 
         {/* Assistants and lecturers */}
         <View style={{ marginBottom: 24 }}>
-          <GradientBorderButton onPress={() => router.push('/more/assistants')}>
+          <GradientBorderButton
+            onPress={() => router.push('/more/assistants')}
+            testID="more-assistants"
+          >
             <Text style={{ color: '#C03694', fontSize: 16, fontWeight: '700', lineHeight: 22.4, flex: 1 }}>
               Assistants and lecturers
             </Text>
@@ -261,7 +270,7 @@ export default function More() {
         </Text>
 
         {/* Log out */}
-        <GradientBorderButton onPress={handleLogout}>
+        <GradientBorderButton onPress={handleLogout} testID="more-logout">
           <Text style={{ color: '#C03694', fontSize: 16, fontWeight: '700', lineHeight: 22.4, flex: 1 }}>
             Log out
           </Text>

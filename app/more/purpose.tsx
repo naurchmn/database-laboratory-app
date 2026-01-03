@@ -1,15 +1,16 @@
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import { Image, Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { LinearGradient } from 'expo-linear-gradient';
 
 export default function Purpose() {
   return (
-    <SafeAreaView className="flex-1 bg-background" edges={['top']}>
+    <SafeAreaView className="flex-1 bg-background" edges={['top']} testID="purpose-screen">
       {/* Header */}
       <View className="px-5 py-4 flex-row items-center">
         <Pressable
+          testID="purpose-back"
           onPress={() => router.back()}
           style={{ paddingVertical: 6, paddingRight: 12 }}
         >

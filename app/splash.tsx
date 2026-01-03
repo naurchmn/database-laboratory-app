@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
 import { Redirect } from "expo-router";
-import { View, Image, StyleSheet } from "react-native";
+import { useEffect, useState } from "react";
+import { Image, StyleSheet, View } from "react-native";
 import { useAuth } from "../src/hooks/useAuth";
 
 export default function Splash() {
@@ -17,10 +17,11 @@ export default function Splash() {
   }
 
   return (
-    <View style={styles.root}>
+    <View style={styles.root} testID="splash-root">
       <Image
         source={require("../src/assets/images/LogoBasdat.png")}
         style={styles.logo}
+        testID="splash-logo"
         resizeMode="contain"
       />
     </View>

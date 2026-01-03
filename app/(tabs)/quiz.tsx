@@ -1,10 +1,10 @@
+import GradientText from '@/components/Global/GradientText';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import { useEffect } from 'react';
 import { Image, Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { auth } from '../../src/lib/firebase';
-import GradientText from '@/components/Global/GradientText';
 
 export default function Quiz() {
   useEffect(() => {
@@ -19,7 +19,7 @@ export default function Quiz() {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-background" edges={['top']}>
+    <SafeAreaView className="flex-1 bg-background" edges={['top']} testID="quiz-screen">
       {/* Header */}
       <View
         className="w-full bg-[#C03694] p-4 justify-center items-center"

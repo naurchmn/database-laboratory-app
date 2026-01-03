@@ -74,12 +74,13 @@ export default function LectureDetail() {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-background" edges={['top']}>
+    <SafeAreaView className="flex-1 bg-background" edges={['top']} testID="lecture-detail-screen">
       <Stack.Screen options={{ headerShown: false }} />
       <View className="px-5 py-4 flex-row items-center">
         <Pressable
           onPress={() => router.back()}
           style={{ paddingVertical: 6, paddingRight: 12 }}
+          testID="lecture-detail-back"
         >
           <Ionicons name="chevron-back" size={22} color="#6D28D9" />
         </Pressable>

@@ -49,7 +49,7 @@ export default function AnnouncementDetail() {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-background" edges={['top']}>
+    <SafeAreaView className="flex-1 bg-background" edges={['top']} testID="bulletin-detail-screen">
       <Stack.Screen options={{ headerShown: false }} />
 
       {/* Header */}
@@ -57,6 +57,7 @@ export default function AnnouncementDetail() {
         <Pressable
           onPress={() => router.back()}
           style={{ paddingVertical: 6, paddingRight: 12 }}
+          testID="bulletin-detail-back"
         >
           <Ionicons name="chevron-back" size={22} color="#6D28D9" />
         </Pressable>

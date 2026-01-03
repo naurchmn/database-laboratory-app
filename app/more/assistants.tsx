@@ -39,10 +39,11 @@ export default function Assistants() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-background" edges={['top']}>
+    <SafeAreaView className="flex-1 bg-background" edges={['top']} testID="members-screen">
       {/* Header */}
       <View className="px-5 py-4 flex-row items-center">
         <Pressable
+          testID="members-back"
           onPress={() => router.back()}
           style={{ paddingVertical: 6, paddingRight: 12 }}
         >
