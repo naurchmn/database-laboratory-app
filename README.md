@@ -13,6 +13,12 @@ Identitas aplikasi (dari konfigurasi Expo):
 - iOS bundle id: `com.basdat.databaselaboratory`
 - Android package: `com.basdat.databaselaboratory`
 
+## Pembagian Tugas
+| Nama Lengkap  | NIM | Tugas | 
+| ------------- | ------------- | ------------- |
+| Naura Ayurachmani  | 18223061  | -Desain UI/UX<br>-Initial project setup<br>-Frontend home dashboard, bulletin, lectures<br>-Membuat navigation bar<br>-Membuat laporan|
+| Noeriza Aqila W.  | 18223095  | -Frontend quiz, more, bulletin, authentication<br>-Backend beserta integrasinya dengan frontend<br>-Testing|
+
 ## Gambaran struktur repo
 
 - `app/`: routing & UI pages (Expo Router)
