@@ -115,7 +115,7 @@ export default function Lectures() {
         }}
       >
         <Text className="text-white text-3xl font-bold">
-          Lectures Overview
+          Lectures overview
         </Text>
 
         <View

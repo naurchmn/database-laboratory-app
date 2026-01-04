@@ -259,7 +259,7 @@ export default function More() {
             style={{ width: 47, height: 48 }}
             resizeMode="contain"
           />
-          <Text style={{ marginLeft: 12, flex: 1, color: '#EB68A3', fontSize: 14, fontWeight: '500', lineHeight: 19.6 }}>
+          <Text style={{ marginLeft: 12, flex: 1, color: '#EB68A3', fontSize: 14, fontWeight: '500', lineHeight: 20, marginTop: 8 }}>
             Jl. Ganesa No.10, Lb. Siliwangi, Kecamatan Coblong, Kota Bandung, Jawa Barat 40132
           </Text>
         </Pressable>
